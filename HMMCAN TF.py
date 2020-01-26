@@ -19,8 +19,8 @@ savedir  = 'F:/UChicago/degree paper/Archive/save/'      # Savepath to save the 
 #npz = np.load(datapath + 'yelp_review_small.npz', allow_pickle=True)
 #npz = np.load(datapath + 'yelp_review_1000.npz', allow_pickle=True)
 #npz = np.load(datapath + 'yelp_review_new.npz', allow_pickle=True)
-#npz = np.load(datapath + 'yelp_review.npz', allow_pickle=True)
-npz = np.load(datapath + 'amazon_review_100k.npz', allow_pickle=True)
+npz = np.load(datapath + 'yelp_review.npz', allow_pickle=True)
+#npz = np.load(datapath + 'amazon_review_100k.npz', allow_pickle=True)
 data = npz['arr_0']
 data[:3,]
 
@@ -47,16 +47,16 @@ X_valid,X_test,y_valid,y_test = train_test_split(X_test,y_test,
 #with open('%sword2idx_yelp_small.json' % datapath) as f:
 #with open('%sword2idx_yelp_1000.json' % datapath) as f:
 #with open('%sword2idx_yelp_new.json' % datapath) as f:
-#with open('%sword2idx_yelp.json' % datapath) as f:
-with open('%sword2idx_amazon_100k.json' % datapath) as f:
+with open('%sword2idx_yelp.json' % datapath) as f:
+#with open('%sword2idx_amazon_100k.json' % datapath) as f:
     w2i = json.load(f)
 
 # Precomputed wordembedding matrix with dimension 50
 #npz = np.load('%sWordEmbedding_yelp_small.npz' % datapath)
 #npz = np.load('%sWordEmbedding_yelp_1000.npz' % datapath)
 #npz = np.load('%sWordEmbedding_yelp_new.npz' % datapath)
-#npz = np.load('%sWordEmbedding_yelp.npz' % datapath)
-npz = np.load('%sWordEmbedding_amazon_100k.npz' % datapath)
+npz = np.load('%sWordEmbedding_yelp.npz' % datapath)
+#npz = np.load('%sWordEmbedding_amazon_100k.npz' % datapath)
 WordEmbeddings = npz['arr_0']
 
 
@@ -250,8 +250,8 @@ with tf.Session() as sess:
             bestscore = valscore
             #save_path = saver.save(sess, savedir + "savedmodels/hmmcan_small_tf_50.ckpt")
             #save_path = saver.save(sess, savedir + "savedmodels/hmmcan_tf_1000.ckpt")
-            #save_path = saver.save(sess, savedir + "savedmodels/hmmcan_tf_50.ckpt")
-            save_path = saver.save(sess, savedir + "savedmodels/hmmcan_tf_amazon.ckpt")
+            save_path = saver.save(sess, savedir + "savedmodels/hmmcan_tf_50.ckpt")
+            #save_path = saver.save(sess, savedir + "savedmodels/hmmcan_tf_amazon.ckpt")
         temptime = datetime.timedelta(seconds=round(time.time() - start))
         print("epoch %i, training accuracy: %.2f, validation accuracy: %.2f," % (
         epoch + 1, trainscore * 100, valscore * 100), "time: ", temptime)
@@ -264,8 +264,8 @@ print("\nTime:", totaltime)
 accuracy = np.column_stack((np.array(train_acc), np.array(valid_acc)))
 #np.savez(datapath + 'accuracy_hmmcan_small_tf_50.npz', accuracy )
 #np.savez(datapath + 'accuracy_hmmcan_tf_1000.npz', accuracy )
-#np.savez(datapath + 'accuracy_hmmcan_tf_50.npz', accuracy )
-np.savez(datapath + 'accuracy_hmmcan_tf_amazon.npz', accuracy )
+np.savez(datapath + 'accuracy_hmmcan_tf_50.npz', accuracy )
+#np.savez(datapath + 'accuracy_hmmcan_tf_amazon.npz', accuracy )
 train_acc_hmcan = train_acc
 valid_acc_hmcan = valid_acc
 

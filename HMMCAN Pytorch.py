@@ -32,7 +32,9 @@ savedir  = 'F:/UChicago/degree paper/Archive/save/'      # Savepath to save the 
 #npz = np.load(datapath + 'yelp_review_1000.npz', allow_pickle=True)
 #npz = np.load(datapath + 'yelp_review_new.npz', allow_pickle=True)
 #npz = np.load(datapath + 'yelp_review.npz', allow_pickle=True)
-npz = np.load(datapath + 'amazon_review_100k.npz', allow_pickle=True)
+#npz = np.load(datapath + 'amazon_review_100k.npz', allow_pickle=True) #Tool dataset
+#npz = np.load(datapath + 'amazon_review_100k_cell.npz', allow_pickle=True) #cell dataset
+npz = np.load(datapath + 'amazon_review_100k_pet.npz', allow_pickle=True) #pet dataset
 data = npz['arr_0']
 data[:3,]
 
@@ -66,7 +68,9 @@ X_valid,X_test,y_valid,y_test = train_test_split(X_test,y_test,
 #with open('%sword2idx_yelp_1000.json' % datapath) as f:
 #with open('%sword2idx_yelp_new.json' % datapath) as f:
 #with open('%sword2idx_yelp.json' % datapath) as f:
-with open('%sword2idx_amazon_100k.json' % datapath) as f:
+#with open('%sword2idx_amazon_100k.json' % datapath) as f:
+#with open('%sword2idx_amazon_100k_cell.json' % datapath) as f:
+with open('%sword2idx_amazon_100k_pet.json' % datapath) as f:
     w2i = json.load(f)
 
 # Precomputed wordembedding matrix with dimension 50
@@ -74,7 +78,9 @@ with open('%sword2idx_amazon_100k.json' % datapath) as f:
 #npz = np.load('%sWordEmbedding_yelp_1000.npz' % datapath)
 #npz = np.load('%sWordEmbedding_yelp_new.npz' % datapath)
 #npz = np.load('%sWordEmbedding_yelp.npz' % datapath)
-npz = np.load('%sWordEmbedding_amazon_100k.npz' % datapath)
+#npz = np.load('%sWordEmbedding_amazon_100k.npz' % datapath)
+#npz = np.load('%sWordEmbedding_amazon_100k_cell.npz' % datapath)
+npz = np.load('%sWordEmbedding_amazon_100k_pet.npz' % datapath)
 WordEmbeddings = npz['arr_0']
 
 
@@ -432,7 +438,9 @@ for epoch in range(n_epochs):
         #save_path = torch.save(model, savedir + "savedmodels/hmmcan_py_1000.pkl")
         #save_path = torch.save(model, savedir + "savedmodels/hmmcan_py_small_new.pkl")
         #save_path = torch.save(model, savedir + "savedmodels/hmmcan_py_50.pkl")
-        save_path = torch.save(model, savedir + "savedmodels/hmmcan_py_amazon.pkl")
+        #save_path = torch.save(model, savedir + "savedmodels/hmmcan_py_amazon.pkl")
+        #save_path = torch.save(model, savedir + "savedmodels/hmmcan_py_amazon_cell.pkl")
+        save_path = torch.save(model, savedir + "savedmodels/hmmcan_py_amazon_pet.pkl")
     temptime = datetime.timedelta(seconds=round(time.time() - start))
     print("epoch %i, training accuracy: %.2f, validation accuracy: %.2f," % (
         epoch + 1, accuracy * 100, valscore * 100), "time: ", temptime)
@@ -447,7 +455,9 @@ accuracy = np.column_stack((np.array(train_acc), np.array(valid_acc)))
 #np.savez(datapath + 'accuracy_hmmcan_py_1000.npz', accuracy )
 #np.savez(datapath + 'accuracy_hmmcan_py_small_new.npz', accuracy )
 #np.savez(datapath + 'accuracy_hmmcan_py_50.npz', accuracy )
-np.savez(datapath + 'accuracy_hmmcan_py_amazon.npz', accuracy )
+#np.savez(datapath + 'accuracy_hmmcan_py_amazon.npz', accuracy )
+#np.savez(datapath + 'accuracy_hmmcan_py_amazon_cell.npz', accuracy )
+np.savez(datapath + 'accuracy_hmmcan_py_amazon_pet.npz', accuracy )
 
 # Plot the accuracy
 epochs = range(1,n_epochs+1)
@@ -465,7 +475,9 @@ start = time.time()
 #model = torch.load(savedir + "savedmodels/hmmcan_py_1000.pkl")
 #model = torch.load(savedir + "savedmodels/hmmcan_py_small_new.pkl")
 #model = torch.load(savedir + "savedmodels/hmmcan_py_50.pkl")
-model = torch.load(savedir + "savedmodels/hmmcan_py_amazon.pkl")
+#model = torch.load(savedir + "savedmodels/hmmcan_py_amazon.pkl") ## Tool Dataset
+#model = torch.load(savedir + "savedmodels/hmmcan_py_amazon_cell.pkl") ## Cell dataset
+model = torch.load(savedir + "savedmodels/hmmcan_py_amazon_pet.pkl") ## Pet dataset
 model = model.eval()
 testscore = val_score(model, X_test, y_test)
 totaltime = datetime.timedelta(seconds=round(time.time()-start))
