@@ -16,10 +16,10 @@ datapath = 'F:/UChicago/degree paper/Archive/' # Datapath where the data is save
 savedir  = 'F:/UChicago/degree paper/Archive/save/'      # Savepath to save the result from the model
 
 # Load sample dataset
-#npz = np.load(datapath + 'yelp_review_small.npz', allow_pickle=True)
+npz = np.load(datapath + 'yelp_review_small.npz', allow_pickle=True)
 #npz = np.load(datapath + 'yelp_review_1000.npz', allow_pickle=True)
 #npz = np.load(datapath + 'yelp_review_new.npz', allow_pickle=True)
-npz = np.load(datapath + 'yelp_review.npz', allow_pickle=True)
+#npz = np.load(datapath + 'yelp_review.npz', allow_pickle=True)
 #npz = np.load(datapath + 'amazon_review_100k.npz', allow_pickle=True)
 data = npz['arr_0']
 data[:3,]
@@ -29,6 +29,7 @@ Y = data[:,1]  # Label
 del data
 
 # Transfer Label to Onehot encoding
+seed=49
 le = LabelEncoder()
 y = le.fit_transform(Y)
 lb = LabelBinarizer()
@@ -37,25 +38,25 @@ LabelEncoding = lb.transform(y)
 
 # (Train, Valid, Test)=(0.8, 0.1, 0.1)
 X_train,X_test,y_train,y_test = train_test_split(X,LabelEncoding,
-                                                 test_size=0.2,random_state=14,stratify=LabelEncoding)
+                                                 test_size=0.2,random_state=seed,stratify=LabelEncoding)
 X_valid,X_test,y_valid,y_test = train_test_split(X_test,y_test,
-                                                test_size=0.5,random_state=14,stratify=y_test)
+                                                test_size=0.5,random_state=seed,stratify=y_test)
 
 ## Create Model
 ## Relevant functions
 # Precomputed word2idx dictionary
-#with open('%sword2idx_yelp_small.json' % datapath) as f:
+with open('%sword2idx_yelp_small.json' % datapath) as f:
 #with open('%sword2idx_yelp_1000.json' % datapath) as f:
 #with open('%sword2idx_yelp_new.json' % datapath) as f:
-with open('%sword2idx_yelp.json' % datapath) as f:
+#with open('%sword2idx_yelp.json' % datapath) as f:
 #with open('%sword2idx_amazon_100k.json' % datapath) as f:
     w2i = json.load(f)
 
 # Precomputed wordembedding matrix with dimension 50
-#npz = np.load('%sWordEmbedding_yelp_small.npz' % datapath)
+npz = np.load('%sWordEmbedding_yelp_small.npz' % datapath)
 #npz = np.load('%sWordEmbedding_yelp_1000.npz' % datapath)
 #npz = np.load('%sWordEmbedding_yelp_new.npz' % datapath)
-npz = np.load('%sWordEmbedding_yelp.npz' % datapath)
+#npz = np.load('%sWordEmbedding_yelp.npz' % datapath)
 #npz = np.load('%sWordEmbedding_amazon_100k.npz' % datapath)
 WordEmbeddings = npz['arr_0']
 
@@ -96,7 +97,7 @@ def ConvertList2Array(docs):
     return result
 
 # Reset tensor graph
-def reset_graph(seed=14):
+def reset_graph(seed=seed):
     tf.reset_default_graph()
     tf.set_random_seed(seed)
     np.random.seed(seed)
@@ -248,9 +249,9 @@ with tf.Session() as sess:
 
         if valscore >= bestscore:
             bestscore = valscore
-            #save_path = saver.save(sess, savedir + "savedmodels/hmmcan_small_tf_50.ckpt")
+            save_path = saver.save(sess, savedir + "savedmodels/hmmcan_small_tf_50.ckpt")
             #save_path = saver.save(sess, savedir + "savedmodels/hmmcan_tf_1000.ckpt")
-            save_path = saver.save(sess, savedir + "savedmodels/hmmcan_tf_50.ckpt")
+            #save_path = saver.save(sess, savedir + "savedmodels/hmmcan_tf_50.ckpt")
             #save_path = saver.save(sess, savedir + "savedmodels/hmmcan_tf_amazon.ckpt")
         temptime = datetime.timedelta(seconds=round(time.time() - start))
         print("epoch %i, training accuracy: %.2f, validation accuracy: %.2f," % (
@@ -262,9 +263,9 @@ print("\nTime:", totaltime)
 
 # Save Accuracy
 accuracy = np.column_stack((np.array(train_acc), np.array(valid_acc)))
-#np.savez(datapath + 'accuracy_hmmcan_small_tf_50.npz', accuracy )
+np.savez(datapath + 'accuracy_hmmcan_small_tf_50.npz', accuracy )
 #np.savez(datapath + 'accuracy_hmmcan_tf_1000.npz', accuracy )
-np.savez(datapath + 'accuracy_hmmcan_tf_50.npz', accuracy )
+#np.savez(datapath + 'accuracy_hmmcan_tf_50.npz', accuracy )
 #np.savez(datapath + 'accuracy_hmmcan_tf_amazon.npz', accuracy )
 train_acc_hmcan = train_acc
 valid_acc_hmcan = valid_acc
